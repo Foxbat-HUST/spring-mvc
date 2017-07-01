@@ -1,0 +1,42 @@
+package com.vn.nev.SpringMvcDemo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.vn.nev.SpringMvcDemo.model.Student;
+import com.vn.nev.SpringMvcDemo.service.StudentService;
+
+@Controller
+public class HomeController {
+
+	@Autowired
+	private StudentService studentService;
+
+	@RequestMapping({ "/index"})
+	public String index(Model model) {
+
+		model.addAttribute("students", studentService.getAll());
+		model.addAttribute("message", "Welcome to SpringMVC's world");
+
+		return "home/index";
+	}
+	@GetMapping("/addStudent")
+	public String studentForm(Model model) {
+		model.addAttribute("student",new Student());
+		
+		return "home/addStudent";
+	}
+
+	@PostMapping("/addStudent")
+	public String studentSubmit(@ModelAttribute Student student) {
+		studentService.add(student);
+
+		return "home/redirect";
+	}
+
+}

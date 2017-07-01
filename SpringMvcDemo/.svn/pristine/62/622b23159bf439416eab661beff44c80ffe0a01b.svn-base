@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Spring MVC sample</title>
+<link href="" th:href="@{/css/bootstrap.css}" type="text/css" rel="stylesheet" />
+<link href="" th:href="@{/css/main.css}" type="text/css" rel="stylesheet" />
+</head>
+<body class="home">
+	<h1 th:text="${message}">Welcome</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>GPA</th>
+			</tr>
+		</thead>
+		<tbody th:each="student : ${students}">
+			<tr>
+				<td th:text="${student.name}"></td>
+				<td th:text="${student.gpa}"></td>
+				<td><a th:href="@{/edit(id=${student.id})}">edit</a></td>
+				<td><a th:href="@{/remove(id=${student.id})}">delete</a></td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="/addStudent">Add another student</a>
+	<a href="/sortByName">Sort by name</a>
+	<a href="/sortByGpa">Sort by Gpa</a>
+</body>
+</html>

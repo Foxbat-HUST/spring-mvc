@@ -1,0 +1,13 @@
+package com.vn.nev.SpringMvcDemo.service;
+
+import java.util.List;
+
+import com.vn.nev.SpringMvcDemo.model.Student;
+
+public interface StudentService {
+	List<Student> getAll();
+
+	Student getById(int id);
+
+	Student add(Student newStudent);
+}

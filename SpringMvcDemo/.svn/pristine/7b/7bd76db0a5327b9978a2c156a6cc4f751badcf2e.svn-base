@@ -1,0 +1,101 @@
+package com.vn.nev.SpringMvcDemo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.vn.nev.SpringMvcDemo.model.Student;
+import com.vn.nev.SpringMvcDemo.service.StudentService;
+
+@Controller
+public class HomeController {
+
+	@Autowired
+	private StudentService studentService;
+	private int editStudentID;
+
+	/*
+	 * show student list controller
+	 */
+	@RequestMapping({ "/index" })
+	public String index(Model model) {
+
+		model.addAttribute("students", studentService.getAll());
+		model.addAttribute("message", "Welcome to SpringMVC's world");
+
+		return "home/index";
+	}
+	/*
+	 * add student controller
+	 */
+	@GetMapping("/addStudent")
+	public String studentForm(Model model) {
+		model.addAttribute("student", new Student());
+
+		return "home/addStudent";
+	}
+	/*
+	 * handle add student form
+	 */
+	@PostMapping("/addStudent")
+	public String studentSubmit(@ModelAttribute Student student) {
+		studentService.add(student);
+
+		return "home/redirect";
+	}
+	/*
+	 * remove student controller
+	 */
+	@RequestMapping({ "/remove" })
+	public String delete(Model model, int id) {
+		int removedItem = studentService.removeById(id);
+		model.addAttribute("students", studentService.getAll());
+		model.addAttribute("message", String.format("removed: %d student", removedItem));
+
+		return "home/index";
+	}
+	/*
+	 * edit student controller
+	 */
+	@GetMapping("/edit")
+	public String edit(Model model,int id) {
+		model.addAttribute("student", new Student());
+		editStudentID=id;
+		return "home/edit";
+	}
+	/*
+	 * handle edit student form
+	 * back to index home
+	 */
+	@PostMapping("/edit")
+	public String editStudentSubmit(@ModelAttribute Student student,Model model) {
+		student.setId(editStudentID);
+		studentService.editById(student);
+		model.addAttribute("message","student list after edit");
+		model.addAttribute("students",studentService.getAll());
+		return "home/index";
+	}
+	/*
+	 * sort by name controller
+	 */
+	@RequestMapping({"/sortByName"})
+	public String sortByName(Model model){
+		model.addAttribute("message","student list sort by name");
+		model.addAttribute("students",studentService.getAllOrderByName());
+		return "home/index";
+	}
+	/*
+	 * sort by gpa controller
+	 */
+	@RequestMapping({"/sortByGpa"})
+	public String sortByGpa(Model model){
+		model.addAttribute("message","student list sort by gpa");
+		model.addAttribute("students",studentService.getAllOrderbyGpa());
+		return "home/index";
+	}
+
+}
