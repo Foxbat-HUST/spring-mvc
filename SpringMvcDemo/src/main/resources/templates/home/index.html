@@ -7,7 +7,22 @@
 	rel="stylesheet" />
 <script type="text/javascript" th:src="@{/js/jquery-3.2.1.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+<link href="" th:href="@{/fonts/glyphicons-halflings-regular.eot}"
+	rel='stylesheet' type='text/css' />
+<link href="" th:href="@{/fonts/glyphicons-halflings-regular.svg}"
+	rel='stylesheet' type='text/css' />
+<link href="" th:href="@{/fonts/glyphicons-halflings-regular.ttf}"
+	rel='stylesheet' type='text/css' />
+<link href="" th:href="@{/fonts/glyphicons-halflings-regular.woff}"
+	rel='stylesheet' type='text/css' />
+<link href="" th:href="@{/glyphicons-halflings-regular.woff2}"
+	rel='stylesheet' type='text/css' />
 <style>
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
 .custom {
 	color: green;
 }
@@ -19,22 +34,28 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("span").click(function() {
-			var postData = {
+			var span = {
 				"id" : $(this).attr("id")
-			}
-			console.log(postData);
+			};
+			console.log($(this).attr("id"));
 			$.ajax({
-				type : 'POST',
-				contentType : 'application/json; charset=utf-8',
+				type : "POST",
+				contentType : "application/json",
+				url : "/ahihi/dongok",
+				data : JSON.stringify(span),
 				dataType : 'json',
-				url : '/rating',
-				data : JSON.stringify(postData),
-				mimeType: 'application/json',
-				success : function(result) {
-					console.log('success:'+result);
+				cache : false,
+				timeout : 600000,
+				success : function(data) {
+					console.log(data);
+					var currentRating=$(this).prev().text();
+					console.log("current rating", currentRating);
+					console.log("now ", currentRating+1);
+					$(this).prev().text("tired");
+					
 				},
-				error : function(exception) {
-					console.log('Exeption:' + exception);
+				error : function(e) {
+					console.log("failed");
 				}
 			});
 		});
@@ -59,9 +80,10 @@
 				<td th:text="${student.gpa}"></td>
 				<td><a th:href="@{/edit(id=${student.id})}">edit</a></td>
 				<td><a th:href="@{/remove(id=${student.id})}">delete</a></td>
-				<td><span th:text="${student.rating}"></span> <span
-					th:id="${student.id}" class="glyphicon glyphicon-heart custom"
-					aria-hidden="true"></span></td>
+				<td>
+				<span th:text="${student.rating}"></span>
+				<span th:id="${student.id}" class="glyphicon glyphicon-heart custom" >
+				</span></td>
 			</tr>
 		</tbody>
 	</table>

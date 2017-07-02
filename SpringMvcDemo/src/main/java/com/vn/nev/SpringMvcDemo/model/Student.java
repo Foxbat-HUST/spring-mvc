@@ -35,7 +35,7 @@ public class Student {
 	 */
 	@Override
 	public String toString() {
-		return String.format("{id=%d, name=%s, gpa=%s}", id, name, gpa);
+		return String.format("{id=%d, name=%s, gpa=%s rating:%d}", id, name, gpa,rating);
 	}
 
 	public int getId() {

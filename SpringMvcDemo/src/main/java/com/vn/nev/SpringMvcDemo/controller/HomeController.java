@@ -1,16 +1,20 @@
 package com.vn.nev.SpringMvcDemo.controller;
 
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.vn.nev.SpringMvcDemo.model.Span;
 import com.vn.nev.SpringMvcDemo.model.Student;
 import com.vn.nev.SpringMvcDemo.service.StudentService;
 import com.vn.nev.SpringMvcDemo.service.impl.StudentServiceImpl;
@@ -111,20 +115,16 @@ public class HomeController {
 		return "home/index";
 	}
 
-	/*
-	 * handle data posted by jquery
-	 */
-//	@RequestMapping(value="person", method = RequestMethod.POST)
-//	  public @ResponseBody Person post( @RequestBody final  Person person) {    
-//	 
-//	      System.out.println(person.getId() + " " + person.getName());
-//	      return person;
-//	  }
-	@RequestMapping(value = "/rating", method = RequestMethod.POST)
-	public @ResponseBody String push(@RequestBody int id) {
-//	    Student ratingStudent=studentService.getById(id);
-//	    ratingStudent.setRating(ratingStudent.getRating()+1);
-//	    studentService.editById(ratingStudent);
-	    return "rederect:/index";
-	}
+	@PostMapping("/ahihi/dongok")
+    public ResponseEntity<?> getSearchResultViaAjax(@Valid @RequestBody Span span, Errors errors) {
+        System.out.println("student: "+span.getId());
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(span);
+        }
+        Student ratingStudent=studentService.getById(span.getId());
+        ratingStudent.setRating(1+ratingStudent.getRating());
+        studentService.editById(ratingStudent);
+        return ResponseEntity.ok(span);
+    }
+
 }
